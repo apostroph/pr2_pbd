@@ -618,7 +618,7 @@ class World:
                                    self.marker_feedback_cb)
             self._im_server.applyChanges()
 
-            for cluster in command.clusters:
+            for cluster in resp.clusters:
                 points = cluster.points
                 if (len(points) == 0):
                     return Point(0, 0, 0)

@@ -41,5 +41,3 @@ string UNRECOGNIZED = unrecognized
 # Fields
 # ----------------------------------------------------------------------
 string command
-
-int16 acton_id
