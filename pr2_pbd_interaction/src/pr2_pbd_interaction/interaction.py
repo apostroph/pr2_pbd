@@ -76,8 +76,7 @@ class Interaction:
         self._arm_reset_publisher = rospy.Publisher(
             'arm_control_reset', String)
         rospy.Subscriber(
-            'recognized_command', Command, self._action_command_cb)
-        rospy.Subscriber('gui_command', GuiCommand, self._gui_command_cb)
+            '/action/perform_action', Command, self._action_command_cb)
 
         # Initialize trajectory recording state.
         self._is_recording_motion = False
@@ -111,7 +110,7 @@ class Interaction:
         rospy.on_shutdown(self._on_shutdown)
 
         # The PbD backend is ready.
-        rospy.loginfo('Interaction initialized 1.01')
+        rospy.loginfo('Interaction initialized 1.02')
         self._ping_srv = rospy.Service(
             'interaction_ping', Ping, self._interaction_ping)
 
