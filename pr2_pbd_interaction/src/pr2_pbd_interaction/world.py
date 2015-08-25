@@ -16,6 +16,7 @@ from std_msgs.msg import ColorRGBA, Header
 from visualization_msgs.msg import Marker, InteractiveMarker
 from visualization_msgs.msg import InteractiveMarkerControl
 from visualization_msgs.msg import InteractiveMarkerFeedback
+from pr2_pbd_interaction.msg import Vision
 from pr2_pbd_speech_recognition.msg import Command
 from interactive_markers.interactive_marker_server import InteractiveMarkerServer
 from interactive_markers.menu_handler import MenuHandler
@@ -158,7 +159,7 @@ class World:
         self._tf_broadcaster = TransformBroadcaster()
         self._im_server = InteractiveMarkerServer('world_objects')
             
-        rospy.Subscriber('/action/objects', Command, self._object_pose)
+        rospy.Subscriber('/action/objects', Vision, self._object_pose)
             
             
         rospy.loginfo('------------ WORLD 1 -------------')
