@@ -76,7 +76,7 @@ class Interaction:
         self._arm_reset_publisher = rospy.Publisher(
             'arm_control_reset', String)
         rospy.Subscriber(
-            'recognized_command', Command, self._speech_command_cb)
+            'recognized_command', Command, self._action_command_cb)
         rospy.Subscriber('gui_command', GuiCommand, self._gui_command_cb)
 
         # Initialize trajectory recording state.
@@ -215,7 +215,7 @@ class Interaction:
     # The following methods receive commands from speech / GUI and
     # process them. These are the multiplexers.
 
-    def _speech_command_cb(self, command):
+    def _action_command_cb(self, command):
         '''Callback for when a "speech" command is received.
 
         Note that Commands can actually be received from speech OR the
@@ -252,7 +252,7 @@ class Interaction:
         it is specifically a command that is only possible from the GUI.
         Commands sent from the GUI that are also possible via speech are
         sent via Command messages and handled in the
-        _speech_command_cb(...) function above.
+        _action_command_cb(...) function above.
 
         Args:
             command (GUICommand): The command received from the GUI.
