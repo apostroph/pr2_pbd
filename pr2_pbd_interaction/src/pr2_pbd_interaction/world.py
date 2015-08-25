@@ -656,54 +656,11 @@ class World:
             rospy.logerr('Could not look down to take table snapshot')
             return False
         rospy.loginfo('Head is now (successfully) stairing at table.')
-
-        rospy.loginfo("waiting for segmentation service")
-
-        try:
-            resp = self._segmentation_service()
-            rospy.loginfo("Adding landmarks")
-
-            self._reset_objects()
-
-            # add the table
-            xmin = resp.table.x_min
-            ymin = resp.table.y_min
-            xmax = resp.table.x_max
-            ymax = resp.table.y_max
-            depth = xmax - xmin
-            width = ymax - ymin
-
-            pose = resp.table.pose.pose
-            pose.position.x = pose.position.x + xmin + depth / 2
-            pose.position.y = pose.position.y + ymin + width / 2
-            dimensions = Vector3(depth, width, 0.01)
-            self.surface = World._get_surface_marker(pose, dimensions)
-            self._im_server.insert(self.surface,
-                                   self.marker_feedback_cb)
-            self._im_server.applyChanges()
-
-            for cluster in resp.clusters:
-                points = cluster.points
-                if (len(points) == 0):
-                    return Point(0, 0, 0)
-                [minX, maxX, minY, maxY, minZ, maxZ] = [
-                    points[0].x, points[0].x, points[0].y, points[0].y,
-                    points[0].z, points[0].z]
-                for pt in points:
-                    minX = min(minX, pt.x)
-                    minY = min(minY, pt.y)
-                    minZ = min(minZ, pt.z)
-                    maxX = max(maxX, pt.x)
-                    maxY = max(maxY, pt.y)
-                    maxZ = max(maxZ, pt.z)
-                self._add_new_object(Pose(Point((minX + maxX) / 2, (minY + maxY) / 2,
-                                                (minZ + maxZ) / 2), Quaternion(0, 0, 0, 1)),
-                                     Point(maxX - minX, maxY - minY, maxZ - minZ), False)
-            return True
-
-        except rospy.ServiceException, e:
-            print "Call to segmentation service failed: %s" % e
+        
+        rospy.sleep(5.)
+	if World.has_objects():
             return False
+	return False
 
     @staticmethod
     def get_tf_pose(tf_name, ref_frame='base_link'):
