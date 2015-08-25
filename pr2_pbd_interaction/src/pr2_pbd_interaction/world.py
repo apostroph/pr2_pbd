@@ -157,11 +157,6 @@ class World:
         self._lock = threading.Lock()
         self._tf_broadcaster = TransformBroadcaster()
         self._im_server = InteractiveMarkerServer('world_objects')
-        
-        rospy.wait_for_service('tabletop_segmentation')
-        self._segmentation_service = rospy.ServiceProxy(
-            'tabletop_segmentation',
-            TabletopSegmentation)
             
         rospy.Subscriber('/action/objects', Command, self._object_pose)
             
