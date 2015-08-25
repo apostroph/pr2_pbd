@@ -92,7 +92,9 @@ class Interaction:
         # (This happens internally in Response.respond(...)).
         self.responses = {
             Command.TEST_MICROPHONE: Response(
-            Command.EXECUTE_ACTION: Response(self._execute_action, None)
+                self._empty_response,
+                [RobotSpeech.TEST_RESPONSE, GazeGoal.NOD]),
+            Command.CREATE_NEW_ACTION: Response(self._create_action, None)
         }
 
         # Span off a thread to run the update loops.
@@ -109,7 +111,7 @@ class Interaction:
         rospy.on_shutdown(self._on_shutdown)
 
         # The PbD backend is ready.
-        rospy.loginfo('Interaction initialized 1.02')
+        rospy.loginfo('Interaction initialized 1.01')
         self._ping_srv = rospy.Service(
             'interaction_ping', Ping, self._interaction_ping)
 
