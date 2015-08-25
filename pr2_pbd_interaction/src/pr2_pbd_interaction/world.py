@@ -162,6 +162,8 @@ class World:
             'tabletop_segmentation',
             TabletopSegmentation)
             
+        rospy.Subscriber('/action/objects', TabletopSegmentation, self._action_command_cb)
+            
             
         rospy.loginfo('------------ WORLD 1 -------------')
 
