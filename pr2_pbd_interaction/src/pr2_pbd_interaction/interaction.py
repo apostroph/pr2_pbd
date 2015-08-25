@@ -110,7 +110,7 @@ class Interaction:
         rospy.on_shutdown(self._on_shutdown)
 
         # The PbD backend is ready.
-        rospy.loginfo('Interaction initialized 1.02')
+        rospy.loginfo('Interaction initialized 1.03')
         self._ping_srv = rospy.Service(
             'interaction_ping', Ping, self._interaction_ping)
 

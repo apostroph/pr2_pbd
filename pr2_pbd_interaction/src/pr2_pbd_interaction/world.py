@@ -161,6 +161,8 @@ class World:
         self._segmentation_service = rospy.ServiceProxy(
             'tabletop_segmentation',
             TabletopSegmentation)
+            
+        rospy.Subscriber('gui_command', GuiCommand, self._vision_command_cb)
 
         # rospy.wait_for_service('find_cluster_bounding_box')
         # self._bb_service = rospy.ServiceProxy(
@@ -579,6 +581,11 @@ class World:
     # ##################################################################
     # Instance methods: Public (API)
     # ##################################################################
+    
+    def _vision_command_cb(self, command):
+        
+        rospy.loginfo('Need to do something.')
+        
 
     def update_object_pose(self):
         ''' Function to externally update an object pose.'''
