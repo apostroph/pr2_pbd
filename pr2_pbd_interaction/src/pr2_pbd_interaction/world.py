@@ -161,6 +161,9 @@ class World:
         self._segmentation_service = rospy.ServiceProxy(
             'tabletop_segmentation',
             TabletopSegmentation)
+            
+            
+        rospy.loginfo('------------ WORLD 1 -------------')
 
         # rospy.wait_for_service('find_cluster_bounding_box')
         # self._bb_service = rospy.ServiceProxy(
