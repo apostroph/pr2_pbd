@@ -16,8 +16,6 @@ from std_msgs.msg import ColorRGBA, Header
 from visualization_msgs.msg import Marker, InteractiveMarker
 from visualization_msgs.msg import InteractiveMarkerControl
 from visualization_msgs.msg import InteractiveMarkerFeedback
-from pr2_pbd_interaction.msg import Vision
-from pr2_pbd_speech_recognition.msg import Command
 from interactive_markers.interactive_marker_server import InteractiveMarkerServer
 from interactive_markers.menu_handler import MenuHandler
 from actionlib_msgs.msg import GoalStatus
@@ -158,11 +156,11 @@ class World:
         self._lock = threading.Lock()
         self._tf_broadcaster = TransformBroadcaster()
         self._im_server = InteractiveMarkerServer('world_objects')
-            
-        rospy.Subscriber('/action/objects', Vision, self._object_pose)
-            
-            
-        rospy.loginfo('------------ WORLD 1 -------------')
+        
+        rospy.wait_for_service('tabletop_segmentation')
+        self._segmentation_service = rospy.ServiceProxy(
+            'tabletop_segmentation',
+            TabletopSegmentation)
 
         # rospy.wait_for_service('find_cluster_bounding_box')
         # self._bb_service = rospy.ServiceProxy(
@@ -577,10 +575,12 @@ class World:
         button_control.markers.append(text_marker)
         int_marker.controls.append(button_control)
         return int_marker
-        
-        
-        
-    def _object_pose(self, command):
+
+    # ##################################################################
+    # Instance methods: Public (API)
+    # ##################################################################
+
+    def update_object_pose(self):
         ''' Function to externally update an object pose.'''
         # Look down at the table.
         rospy.loginfo('Head attempting to look at table.')
@@ -618,7 +618,7 @@ class World:
                                    self.marker_feedback_cb)
             self._im_server.applyChanges()
 
-            for cluster in command.clusters:
+            for cluster in resp.clusters:
                 points = cluster.points
                 if (len(points) == 0):
                     return Point(0, 0, 0)
@@ -640,27 +640,6 @@ class World:
         except rospy.ServiceException, e:
             print "Call to segmentation service failed: %s" % e
             return False
-    # ##################################################################
-    # Instance methods: Public (API)
-    # ##################################################################
-
-    def update_object_pose(self):
-        ''' Function to externally update an object pose.'''
-        # Look down at the table.
-        rospy.loginfo('Head attempting to look at table.')
-        Response.perform_gaze_action(GazeGoal.LOOK_DOWN)
-        while (Response.gaze_client.get_state() == GoalStatus.PENDING or
-               Response.gaze_client.get_state() == GoalStatus.ACTIVE):
-            rospy.sleep(PAUSE_SECONDS)
-        if Response.gaze_client.get_state() != GoalStatus.SUCCEEDED:
-            rospy.logerr('Could not look down to take table snapshot')
-            return False
-        rospy.loginfo('Head is now (successfully) stairing at table.')
-        
-        rospy.sleep(5.)
-	if World.has_objects():
-            return False
-	return False
 
     @staticmethod
     def get_tf_pose(tf_name, ref_frame='base_link'):
