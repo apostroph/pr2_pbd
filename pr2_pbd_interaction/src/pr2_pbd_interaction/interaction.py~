@@ -128,6 +128,9 @@ class Interaction:
         signal.signal(signal.SIGINT, self._signal_handler)
         signal.signal(signal.SIGQUIT, self._signal_handler)
         rospy.on_shutdown(self._on_shutdown)
+        
+        
+        Response.perform_gaze_action(GazeGoal.LOOK_DOWN)
 
         # The PbD backend is ready.
         rospy.loginfo('Interaction initialized 1.03')
