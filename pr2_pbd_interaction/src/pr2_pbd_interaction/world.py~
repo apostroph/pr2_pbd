@@ -121,6 +121,9 @@ class WorldLandmark:
         '''
         rospy.loginfo('Will remove object: ' + self.get_name())
         self.is_removed = True
+        
+        
+    Response.perform_gaze_action(GazeGoal.LOOK_DOWN)
 
     # TODO(mbforbes): Re-implement object recognition or remove
     # this dead code.

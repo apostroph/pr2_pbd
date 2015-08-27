@@ -93,7 +93,27 @@ class Interaction:
             Command.TEST_MICROPHONE: Response(
                 self._empty_response,
                 [RobotSpeech.TEST_RESPONSE, GazeGoal.NOD]),
-            Command.EXECUTE_ACTION: Response(self._execute_action, None)
+            Command.RELAX_RIGHT_ARM: Response(self._relax_arm, Side.RIGHT),
+            Command.RELAX_LEFT_ARM: Response(self._relax_arm, Side.LEFT),
+            Command.OPEN_RIGHT_HAND: Response(self._open_hand, Side.RIGHT),
+            Command.OPEN_LEFT_HAND: Response(self._open_hand, Side.LEFT),
+            Command.CLOSE_RIGHT_HAND: Response(self._close_hand, Side.RIGHT),
+            Command.CLOSE_LEFT_HAND: Response(self._close_hand, Side.LEFT),
+            Command.STOP_EXECUTION: Response(self._stop_execution, None),
+            Command.DELETE_ALL_STEPS: Response(self._delete_all_steps, None),
+            Command.DELETE_LAST_STEP: Response(self._delete_last_step, None),
+            Command.FREEZE_RIGHT_ARM: Response(self._freeze_arm, Side.RIGHT),
+            Command.FREEZE_LEFT_ARM: Response(self._freeze_arm, Side.LEFT),
+            Command.CREATE_NEW_ACTION: Response(self._create_action, None),
+            Command.EXECUTE_ACTION: Response(self._execute_action, None),
+            Command.NEXT_ACTION: Response(self._next_action, None),
+            Command.PREV_ACTION: Response(self._previous_action, None),
+            Command.SAVE_POSE: Response(self._save_step, None),
+            Command.RECORD_OBJECT_POSE: Response(
+                self._record_object_pose, None),
+            Command.START_RECORDING_MOTION: Response(
+                self._start_recording, None),
+            Command.STOP_RECORDING_MOTION: Response(self._stop_recording, None)
         }
 
         # Span off a thread to run the update loops.
