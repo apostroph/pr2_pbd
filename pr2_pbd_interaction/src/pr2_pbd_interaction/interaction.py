@@ -214,39 +214,6 @@ class Interaction:
     # The following methods receive commands from speech / GUI and
     # process them. These are the multiplexers.
 
-    def _action_command_cb(self, command):
-        '''Callback for when a "speech" command is received.
-
-        Note that Commands can actually be received from speech OR the
-        GUI. They are called "speech commands" because they include all
-        commands that can be issued with speech. The few commands that
-        can be issued through the GUI and not through speech come as
-        GUICommands, and are processed below in _gui_command_cb(...).
-
-        Args:
-            command (Command): The command received from speech OR the
-                GUI.
-        '''
-        action_no = command.acton_id
-	self.session.switch_to_action(action_no, self.world.get_frame_list())
-        
-        # We extract the command string as we use it a lot.
-        strCmd = command.command
-        if strCmd in self.responses.keys():
-            rospy.loginfo(
-                '\033[32m' + 'Calling response for command ' + strCmd +
-                '\033[0m')
-            response = self.responses[strCmd]
-
-            if ((not self.arms.is_executing()) or strCmd ==
-                    Command.STOP_EXECUTION):
-                response.respond()
-            else:
-                rospy.logwarn(
-                    'Ignoring speech command during execution: ' + strCmd)
-        else:
-            rospy.logwarn('This command (' + strCmd + ') is unknown.')
-
     def _gui_command_cb(self, command):
         '''Callback for when a GUICommand is received.
 
@@ -627,6 +594,39 @@ class Interaction:
         '''
         return responses
 
+    def _action_command_cb(self, command):
+        '''Callback for when a "speech" command is received.
+
+        Note that Commands can actually be received from speech OR the
+        GUI. They are called "speech commands" because they include all
+        commands that can be issued with speech. The few commands that
+        can be issued through the GUI and not through speech come as
+        GUICommands, and are processed below in _gui_command_cb(...).
+
+        Args:
+            command (Command): The command received from speech OR the
+                GUI.
+        '''
+        action_no = command.acton_id
+	self.session.switch_to_action(action_no, self.world.get_frame_list())
+        
+        # We extract the command string as we use it a lot.
+        strCmd = command.command
+        if strCmd in self.responses.keys():
+            rospy.loginfo(
+                '\033[32m' + 'Calling response for command ' + strCmd +
+                '\033[0m')
+            response = self.responses[strCmd]
+
+            if ((not self.arms.is_executing()) or strCmd ==
+                    Command.STOP_EXECUTION):
+                response.respond()
+            else:
+                rospy.logwarn(
+                    'Ignoring speech command during execution: ' + strCmd)
+        else:
+            rospy.logwarn('This command (' + strCmd + ') is unknown.')
+
     def _execute_action(self, __=None):
         '''Starts the execution of the current action.
 
@@ -640,36 +640,27 @@ class Interaction:
         '''
         # We must *have* a current action.
         if self.session.n_actions() > 0:
-            # We must have also recorded steps (/poses/frames) in it.
-            if self.session.n_frames() > 1:
-                # Save curent action and retrieve it.
-                self.session.save_current_action()
+	    # Now, see if we can execute.
+	    if self.session.get_current_action().is_object_required():
+		# We need an object; check if we have one.
+		if self.world.update_object_pose():
+		    self.world.update()
+		    # An object is required, and we got one. Execute.
+		    self.session.get_current_action().update_objects(
+			self.world.get_frame_list())
+		    self.arms.start_execution(self.session.get_current_action(),
+			EXECUTION_Z_OFFSET)
+		else:
+		    # An object is required, but we didn't get it.
+		    return [
+			RobotSpeech.OBJECT_NOT_DETECTED, GazeGoal.SHAKE]
+	    else:
+		# No object is required: start execution now.
+		self.arms.start_execution(action, EXECUTION_Z_OFFSET)
 
-                # Now, see if we can execute.
-                if self.session.get_current_action().is_object_required():
-                    # We need an object; check if we have one.
-                    if self.world.update_object_pose():
-                        self.world.update()
-                        # An object is required, and we got one. Execute.
-                        self.session.get_current_action().update_objects(
-                            self.world.get_frame_list())
-                        self.arms.start_execution(self.session.get_current_action(),
-                            EXECUTION_Z_OFFSET)
-                    else:
-                        # An object is required, but we didn't get it.
-                        return [
-                            RobotSpeech.OBJECT_NOT_DETECTED, GazeGoal.SHAKE]
-                else:
-                    # No object is required: start execution now.
-                    self.arms.start_execution(action, EXECUTION_Z_OFFSET)
-
-                # Reply: starting execution.
-                return [RobotSpeech.START_EXECUTION + ' ' +
-                        str(self.session.current_action_index), None]
-            else:
-                # No steps / poses / frames recorded.
-                return [RobotSpeech.EXECUTION_ERROR_NOPOSES + ' ' +
-                        str(self.session.current_action_index), GazeGoal.SHAKE]
+	    # Reply: starting execution.
+	    return [RobotSpeech.START_EXECUTION + ' ' +
+		    str(self.session.current_action_index), None]
         else:
             # No actions.
             return [RobotSpeech.ERROR_NO_SKILLS, GazeGoal.SHAKE]

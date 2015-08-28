@@ -16,6 +16,7 @@ from std_msgs.msg import ColorRGBA, Header
 from visualization_msgs.msg import Marker, InteractiveMarker
 from visualization_msgs.msg import InteractiveMarkerControl
 from visualization_msgs.msg import InteractiveMarkerFeedback
+from pr2_pbd_interaction.msg import Vision
 from interactive_markers.interactive_marker_server import InteractiveMarkerServer
 from interactive_markers.menu_handler import MenuHandler
 from actionlib_msgs.msg import GoalStatus
@@ -161,6 +162,12 @@ class World:
         self._segmentation_service = rospy.ServiceProxy(
             'tabletop_segmentation',
             TabletopSegmentation)
+            
+        rospy.Subscriber(
+            '/action/objects', Vision, self._action_command_cb)
+            
+            
+	pubActObj = n.advertise<pr2_pbd_interaction::Vision> ("/action/objects", 1);
 
         # rospy.wait_for_service('find_cluster_bounding_box')
         # self._bb_service = rospy.ServiceProxy(
@@ -186,6 +193,7 @@ class World:
 
         # Init
         self.clear_all_objects()
+        self.update_object_pose()
 
     # ##################################################################
     # Static methods: Public (API)
@@ -579,6 +587,37 @@ class World:
     # ##################################################################
     # Instance methods: Public (API)
     # ##################################################################
+
+    def _custom_update_object_pose(self, resp):
+
+        rospy.loginfo("Getting object from vision module")
+
+        try:
+
+            self._reset_objects()
+
+            for cluster in resp.clusters:
+                points = cluster.points
+                if (len(points) == 0):
+                    return Point(0, 0, 0)
+                [minX, maxX, minY, maxY, minZ, maxZ] = [
+                    points[0].x, points[0].x, points[0].y, points[0].y,
+                    points[0].z, points[0].z]
+                for pt in points:
+                    minX = min(minX, pt.x)
+                    minY = min(minY, pt.y)
+                    minZ = min(minZ, pt.z)
+                    maxX = max(maxX, pt.x)
+                    maxY = max(maxY, pt.y)
+                    maxZ = max(maxZ, pt.z)
+                self._add_new_object(Pose(Point((minX + maxX) / 2, (minY + maxY) / 2,
+                                                (minZ + maxZ) / 2), Quaternion(0, 0, 0, 1)),
+                                     Point(maxX - minX, maxY - minY, maxZ - minZ), False)
+            return True
+
+        except rospy.ServiceException, e:
+            print "Call to segmentation service failed: %s" % e
+            return False
 
     def update_object_pose(self):
         ''' Function to externally update an object pose.'''
