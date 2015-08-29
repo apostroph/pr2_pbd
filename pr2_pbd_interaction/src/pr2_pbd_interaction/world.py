@@ -190,7 +190,7 @@ class World:
 
         # Init
         self.clear_all_objects()
-        self.update_object_pose()
+        #self.update_object_pose()
 
     # ##################################################################
     # Static methods: Public (API)
