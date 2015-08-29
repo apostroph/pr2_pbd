@@ -165,9 +165,6 @@ class World:
             
         rospy.Subscriber(
             '/action/objects', Vision, self._action_command_cb)
-            
-            
-	pubActObj = n.advertise<pr2_pbd_interaction::Vision> ("/action/objects", 1);
 
         # rospy.wait_for_service('find_cluster_bounding_box')
         # self._bb_service = rospy.ServiceProxy(

@@ -164,7 +164,7 @@ class World:
             TabletopSegmentation)
             
         rospy.Subscriber(
-            '/action/objects', Vision, self._action_command_cb)
+            '/action/objects', Vision, self._custom_update_object_pose)
 
         # rospy.wait_for_service('find_cluster_bounding_box')
         # self._bb_service = rospy.ServiceProxy(
