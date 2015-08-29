@@ -228,6 +228,7 @@ class Interaction:
         '''
         # We extract the command string as we use it a lot.
         strCmd = command.command
+	rospy.loginfo('Action received')
 
         # Because the GUI commands involve selecting actions or steps
         # within actions, we have two prerequisites: first, we cannot be
@@ -645,7 +646,7 @@ class Interaction:
 		# We need an object; check if we have one.
 		if self.world.update_object_pose():
 		    self.world.update()
-		    rospy.loginfo("Executing action")
+		    rospy.loginfo('Executing action')
 		    # An object is required, and we got one. Execute.
 		    self.session.get_current_action().update_objects(
 			self.world.get_frame_list())
