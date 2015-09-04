@@ -610,11 +610,11 @@ class World:
                 points = cluster.data
                 rospy.loginfo("Object detected")
                 # pick a height
-                height =  int (points.height / 2)
+                height =  int (cluster.height / 2)
                 # pick x coords near front and center
-                middle_x = int (points.width / 2)
+                middle_x = int (cluster.width / 2)
                 # examine point
-                middle = read_depth (middle_x, height, points)
+                middle = read_depth (middle_x, height, cluster)
     
                 if (len(points) == 0):
                     return Point(0, 0, 0)
