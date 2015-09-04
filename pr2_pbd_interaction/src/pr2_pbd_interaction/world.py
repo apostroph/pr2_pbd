@@ -595,20 +595,22 @@ class World:
             count_object = 0
 
             for cluster in resp.clusters:
-                points = cluster.points
+                #points = cluster.points
+                points = pc2.read_points(cluster, field_names=['x', 'y', 'z'],
+            skip_nans=True)
                 rospy.loginfo("Object detected")
                 if (len(points) == 0):
                     return Point(0, 0, 0)
                 [minX, maxX, minY, maxY, minZ, maxZ] = [
                     points[0].x, points[0].x, points[0].y, points[0].y,
                     points[0].z, points[0].z]
-                for pt in points:
-                    minX = min(minX, pt.x)
-                    minY = min(minY, pt.y)
-                    minZ = min(minZ, pt.z)
-                    maxX = max(maxX, pt.x)
-                    maxY = max(maxY, pt.y)
-                    maxZ = max(maxZ, pt.z)
+                for x, y, z in points:
+                    minX = min(minX, x)
+                    minY = min(minY, y)
+                    minZ = min(minZ, z)
+                    maxX = max(maxX, x)
+                    maxY = max(maxY, y)
+                    maxZ = max(maxZ, z)
                 self._add_new_object(Pose(Point((minX + maxX) / 2, (minY + maxY) / 2,
                                                 (minZ + maxZ) / 2), Quaternion(0, 0, 0, 1)),
                                      Point(maxX - minX, maxY - minY, maxZ - minZ), False)
