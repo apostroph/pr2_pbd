@@ -614,7 +614,12 @@ class World:
                 # pick x coords near front and center
                 middle_x = int (data.width / 2)
                 # examine point
-                middle = read_depth (middle_x, height, data)
+                rospy.loginfo("Getting object from vision module")
+                # read function
+                
+                data_out = pc2.read_points(data, field_names=None, skip_nans=False, uvs=[width, height])
+                int_data = next(data_out)
+                rospy.loginfo("int_data " + str(int_data))
     
                 if (len(points) == 0):
                     return Point(0, 0, 0)
