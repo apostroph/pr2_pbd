@@ -586,7 +586,7 @@ class World:
     # Instance methods: Public (API)
     # ##################################################################
     
-    def _read_depth(width, height, data) :
+    def read_depth(width, height, data):
         rospy.loginfo("Getting object from vision module")
         # read function
         if (height >= data.height) or (width >= data.width):
@@ -606,15 +606,15 @@ class World:
             self._reset_objects()
             count_object = 0
 
-            for cluster in resp.clusters:
-                points = cluster.data
+            for data in resp.clusters:
+                points = data.data
                 rospy.loginfo("Object detected")
                 # pick a height
-                height =  int (cluster.height / 2)
+                height =  int (data.height / 2)
                 # pick x coords near front and center
-                middle_x = int (cluster.width / 2)
+                middle_x = int (data.width / 2)
                 # examine point
-                middle = _read_depth (middle_x, height, cluster)
+                middle = read_depth (middle_x, height, data)
     
                 if (len(points) == 0):
                     return Point(0, 0, 0)
