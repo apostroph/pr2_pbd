@@ -586,7 +586,7 @@ class World:
     # Instance methods: Public (API)
     # ##################################################################
     
-    def read_depth(width, height, data):
+    def read_depth(self, width, height, data):
         rospy.loginfo("Getting object from vision module")
         # read function
         if (height >= data.height) or (width >= data.width):
