@@ -617,7 +617,7 @@ class World:
                 rospy.loginfo("Getting object from vision module")
                 # read function
                 
-                data_out = pc2.read_points(data, field_names=None, skip_nans=False, uvs=[width, height])
+                data_out = pc2.read_points(data, field_names=None, skip_nans=False, uvs=[middle_x, height])
                 int_data = next(data_out)
                 rospy.loginfo("int_data " + str(int_data))
     
