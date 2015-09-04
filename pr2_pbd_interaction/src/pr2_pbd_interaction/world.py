@@ -190,7 +190,8 @@ class World:
 
         # Init
         self.clear_all_objects()
-        #self.update_object_pose()
+        rospy.loginfo('Head attempting to look at table.')
+        Response.perform_gaze_action(GazeGoal.LOOK_DOWN)
 
     # ##################################################################
     # Static methods: Public (API)
