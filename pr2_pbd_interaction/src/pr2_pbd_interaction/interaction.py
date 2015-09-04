@@ -131,6 +131,7 @@ class Interaction:
 
         # The PbD backend is ready.
         rospy.loginfo('Interaction initialized 1.03')
+        self.world.update_object_pose()
         self._ping_srv = rospy.Service(
             'interaction_ping', Ping, self._interaction_ping)
 
