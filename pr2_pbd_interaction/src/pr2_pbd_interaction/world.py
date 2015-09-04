@@ -190,8 +190,6 @@ class World:
 
         # Init
         self.clear_all_objects()
-        rospy.loginfo('Head attempting to look at table.')
-        Response.perform_gaze_action(GazeGoal.LOOK_DOWN)
 
     # ##################################################################
     # Static methods: Public (API)
@@ -658,6 +656,9 @@ class World:
         '''Removes all objects from the world.'''
         self._reset_objects()
         self._remove_surface()
+        
+        rospy.loginfo('Head attempting to look at table.')
+        Response.perform_gaze_action(GazeGoal.LOOK_DOWN)
 
     def get_nearest_object(self, arm_pose):
         '''Returns the nearest object, if one exists.
