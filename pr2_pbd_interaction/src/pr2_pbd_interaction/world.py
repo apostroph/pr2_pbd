@@ -10,7 +10,6 @@ from numpy.linalg import norm
 from numpy import array
 import rospy
 import tf
-import sensor_msgs.point_cloud2 as pc2
 from tf import TransformListener, TransformBroadcaster
 from geometry_msgs.msg import Quaternion, Vector3, Point, Pose, PoseStamped
 from std_msgs.msg import ColorRGBA, Header
@@ -585,17 +584,6 @@ class World:
     # ##################################################################
     # Instance methods: Public (API)
     # ##################################################################
-    
-    def read_depth(self, width, height, data):
-        rospy.loginfo("Getting object from vision module")
-        # read function
-        if (height >= data.height) or (width >= data.width):
-	  return -1
-	  
-        data_out = pc2.read_points(data, field_names=None, skip_nans=False, uvs=[width, height])
-        int_data = next(data_out)
-        rospy.loginfo("int_data " + str(int_data))
-        return int_data
 
     def _custom_update_object_pose(self, resp):
 
@@ -606,20 +594,9 @@ class World:
             self._reset_objects()
             count_object = 0
 
-            for data in resp.clusters:
-                points = data.data
+            for cluster in resp.clusters:
+                points = cluster.points
                 rospy.loginfo("Object detected")
-                # pick a height
-                height =  int (data.height / 2)
-                # pick x coords near front and center
-                middle_x = int (data.width / 2)
-                # examine point
-                rospy.loginfo("Getting object from vision module")
-                # read function
-                
-                data_out = pc2.read_points(data, field_names=None, skip_nans=False, uvs=[middle_x, height])
-                rospy.loginfo("int_data " + str(int_data))
-    
                 if (len(points) == 0):
                     return Point(0, 0, 0)
                 [minX, maxX, minY, maxY, minZ, maxZ] = [
