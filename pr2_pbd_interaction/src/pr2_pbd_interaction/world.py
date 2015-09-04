@@ -10,6 +10,7 @@ from numpy.linalg import norm
 from numpy import array
 import rospy
 import tf
+import sensor_msgs.point_cloud2 as pc2
 from tf import TransformListener, TransformBroadcaster
 from geometry_msgs.msg import Quaternion, Vector3, Point, Pose, PoseStamped
 from std_msgs.msg import ColorRGBA, Header
