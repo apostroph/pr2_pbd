@@ -597,7 +597,7 @@ class World:
 
             for cluster in resp.clusters:
                 points = cluster.data
-                data_out = pc2.read_points(points, field_names=None, skip_nans=False, uvs=[width, height])
+                data_out = pc2.read_points(points, skip_nans=True, field_names=("x", "y", "z"))
                 int_data = next(data_out)
                 rospy.loginfo("int_data " + str(int_data))
                 
