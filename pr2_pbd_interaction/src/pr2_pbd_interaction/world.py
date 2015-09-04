@@ -633,7 +633,7 @@ class World:
             return False
         rospy.loginfo('Head is now (successfully) stairing at table.')
 
-        return true
+        return True
 
     @staticmethod
     def get_tf_pose(tf_name, ref_frame='base_link'):
