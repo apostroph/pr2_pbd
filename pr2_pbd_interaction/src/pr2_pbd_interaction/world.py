@@ -585,6 +585,17 @@ class World:
     # ##################################################################
     # Instance methods: Public (API)
     # ##################################################################
+    
+    def _read_depth(width, height, data) :
+        rospy.loginfo("Getting object from vision module")
+        # read function
+        if (height >= data.height) or (width >= data.width):
+	  return -1
+	  
+        data_out = pc2.read_points(data, field_names=None, skip_nans=False, uvs=[width, height])
+        int_data = next(data_out)
+        rospy.loginfo("int_data " + str(int_data))
+        return int_data
 
     def _custom_update_object_pose(self, resp):
 
@@ -597,11 +608,14 @@ class World:
 
             for cluster in resp.clusters:
                 points = cluster.data
-                data_out = pc2.read_points(points, skip_nans=True, field_names=("x", "y", "z"))
-                int_data = next(data_out)
-                rospy.loginfo("int_data " + str(int_data))
-                
                 rospy.loginfo("Object detected")
+                # pick a height
+                height =  int (points.height / 2)
+                # pick x coords near front and center
+                middle_x = int (points.width / 2)
+                # examine point
+                middle = read_depth (middle_x, height, points)
+    
                 if (len(points) == 0):
                     return Point(0, 0, 0)
                 [minX, maxX, minY, maxY, minZ, maxZ] = [
