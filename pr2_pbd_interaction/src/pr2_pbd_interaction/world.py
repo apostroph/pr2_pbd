@@ -602,9 +602,7 @@ class World:
                 rospy.loginfo("Object detected")
                 if (len(list(points)) == 0):
                     return Point(0, 0, 0)
-                [minX, maxX, minY, maxY, minZ, maxZ] = [
-                    points[0].x, points[0].x, points[0].y, points[0].y,
-                    points[0].z, points[0].z]
+                [minX, maxX, minY, maxY, minZ, maxZ] = [10, -10, 10, -10, 10, -10]
                 for x, y, z in points:
                     minX = min(minX, x)
                     minY = min(minY, y)
