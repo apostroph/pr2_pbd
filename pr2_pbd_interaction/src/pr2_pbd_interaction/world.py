@@ -10,6 +10,7 @@ from numpy.linalg import norm
 from numpy import array
 import rospy
 import tf
+import sensor_msgs.point_cloud2 as pc2
 from tf import TransformListener, TransformBroadcaster
 from geometry_msgs.msg import Quaternion, Vector3, Point, Pose, PoseStamped
 from std_msgs.msg import ColorRGBA, Header
@@ -595,7 +596,9 @@ class World:
             count_object = 0
 
             for cluster in resp.clusters:
-                points = cluster.points
+                #points = cluster.points
+                points = pc2.read_points(cluster, skip_nans=True, field_names=("x", "y", "z"))
+                self.xyz_generator = points
                 rospy.loginfo("Object detected")
                 if (len(points) == 0):
                     return Point(0, 0, 0)
