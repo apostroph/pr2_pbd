@@ -614,7 +614,7 @@ class World:
                 # pick x coords near front and center
                 middle_x = int (cluster.width / 2)
                 # examine point
-                middle = read_depth (middle_x, height, cluster)
+                middle = _read_depth (middle_x, height, cluster)
     
                 if (len(points) == 0):
                     return Point(0, 0, 0)
