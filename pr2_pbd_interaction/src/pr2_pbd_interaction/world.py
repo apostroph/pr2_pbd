@@ -592,9 +592,11 @@ class World:
         try:
 
             self._reset_objects()
+            count_object = 0
 
             for cluster in resp.clusters:
                 points = cluster.points
+                rospy.loginfo("Object detected")
                 if (len(points) == 0):
                     return Point(0, 0, 0)
                 [minX, maxX, minY, maxY, minZ, maxZ] = [
