@@ -280,7 +280,7 @@ class World:
             rospy.loginfo('Did not find a similar object.')
         else:
             rospy.loginfo('Landmark dissimilarity is --- ' + str(best_dist))
-            if best_dist > OBJ_SIMILAR_DIST_THRESHHOLD:
+            if best_dist > 100:#OBJ_SIMILAR_DIST_THRESHHOLD:
                 rospy.loginfo('Found some objects, but not similar enough.')
                 chosen_obj = None
             else:
