@@ -307,7 +307,6 @@ class World:
         Returns:
             bool
         '''
-        rospy.loginfo('Landmark dissimilarity is --- ' + str(len(World.objects)))
         return len(World.objects) > 0
 
     @staticmethod
