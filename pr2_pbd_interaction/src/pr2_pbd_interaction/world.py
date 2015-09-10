@@ -603,6 +603,7 @@ class World:
                     return Point(0, 0, 0)
                 [minX, maxX, minY, maxY, minZ, maxZ] = [10, -10, 10, -10, 10, -10]
                 for x, y, z in points:
+                    rospy.loginfo("x: %s, y: %s, z: %s", x, y, z)
                     minX = min(minX, x)
                     minY = min(minY, y)
                     minZ = min(minZ, z)
