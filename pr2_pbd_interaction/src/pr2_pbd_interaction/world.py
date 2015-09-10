@@ -599,10 +599,11 @@ class World:
                 #points = cluster.points
                 points = pc2.read_points(cluster, field_names=['x', 'y', 'z'],
             skip_nans=True)
-                rospy.loginfo("Point %s", len(list(points)))
-                #if (len(list(points)) == 0):
-                    #rospy.loginfo("Exit")
-                    #return Point(0, 0, 0)
+                nb_points = len(points)
+                rospy.loginfo("Point %s", nb_points)
+                if (nb_points == 0):
+                    rospy.loginfo("Exit")
+                    return Point(0, 0, 0)
                 rospy.loginfo("Calculating mins and maxs")
                 [minX, maxX, minY, maxY, minZ, maxZ] = [10, -10, 10, -10, 10, -10]
                 for x, y, z in points:
