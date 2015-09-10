@@ -604,17 +604,16 @@ class World:
                     return Point(0, 0, 0)
                 [minX, maxX, minY, maxY, minZ, maxZ] = [10, -10, 10, -10, 10, -10]
                 for x, y, z in points:
-                    rospy.loginfo("x: %s, y: %s, z: %s", x, y, z)
                     minX = min(minX, x)
                     minY = min(minY, y)
                     minZ = min(minZ, z)
                     maxX = max(maxX, x)
                     maxY = max(maxY, y)
                     maxZ = max(maxZ, z)
-                rospy.loginfo("Object detected %s : %s : %s", (minX + maxX) / 2, (minY + maxY) / 2, (minZ + maxZ) / 2)
                 self._add_new_object(Pose(Point((minX + maxX) / 2, (minY + maxY) / 2,
                                                 (minZ + maxZ) / 2), Quaternion(0, 0, 0, 1)),
                                      Point(maxX - minX, maxY - minY, maxZ - minZ), False)
+                rospy.loginfo("Object detected %s : %s : %s", (minX + maxX) / 2, (minY + maxY) / 2, (minZ + maxZ) / 2)
             return True
 
         except rospy.ServiceException, e:
