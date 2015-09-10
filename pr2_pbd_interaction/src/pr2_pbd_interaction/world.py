@@ -599,7 +599,8 @@ class World:
                 #points = cluster.points
                 points = pc2.read_points(cluster, field_names=['x', 'y', 'z'],
             skip_nans=True)
-                nb_points = len(points)
+                nb_points = len(list(points))
+                rospy.loginfo("Point %s", type(points))
                 rospy.loginfo("Point %s", nb_points)
                 if (nb_points == 0):
                     rospy.loginfo("Exit")
