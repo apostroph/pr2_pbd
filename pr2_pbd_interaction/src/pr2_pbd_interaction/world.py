@@ -601,7 +601,9 @@ class World:
             skip_nans=True)
                 rospy.loginfo("Point %s", len(list(points)))
                 if (len(list(points)) == 0):
+                    rospy.loginfo("Exit")
                     return Point(0, 0, 0)
+                rospy.loginfo("Calculating mins and maxs")
                 [minX, maxX, minY, maxY, minZ, maxZ] = [10, -10, 10, -10, 10, -10]
                 for x, y, z in points:
                     minX = min(minX, x)
@@ -610,6 +612,7 @@ class World:
                     maxX = max(maxX, x)
                     maxY = max(maxY, y)
                     maxZ = max(maxZ, z)
+                rospy.loginfo("Adding objects")
                 self._add_new_object(Pose(Point((minX + maxX) / 2, (minY + maxY) / 2,
                                                 (minZ + maxZ) / 2), Quaternion(0, 0, 0, 1)),
                                      Point(maxX - minX, maxY - minY, maxZ - minZ), False)
