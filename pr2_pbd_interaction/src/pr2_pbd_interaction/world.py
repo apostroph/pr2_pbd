@@ -609,7 +609,7 @@ class World:
                     maxX = max(maxX, x)
                     maxY = max(maxY, y)
                     maxZ = max(maxZ, z)
-                rospy.loginfo("Object detected %s : %s : %s", (minX + maxX) / 2, (minY + maxY) / 2, (minZ + maxZ) / 2))
+                rospy.loginfo("Object detected %s : %s : %s", (minX + maxX) / 2, (minY + maxY) / 2, (minZ + maxZ) / 2)
                 self._add_new_object(Pose(Point((minX + maxX) / 2, (minY + maxY) / 2,
                                                 (minZ + maxZ) / 2), Quaternion(0, 0, 0, 1)),
                                      Point(maxX - minX, maxY - minY, maxZ - minZ), False)
