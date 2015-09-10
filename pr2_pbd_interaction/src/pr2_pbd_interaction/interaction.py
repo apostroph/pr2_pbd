@@ -645,19 +645,12 @@ class Interaction:
 	    # Now, see if we can execute.
 	    if self.session.get_current_action().is_object_required():
 		# We need an object; check if we have one.
-		if self.world.update_object_pose():
-		    self.world.update()
-		    rospy.loginfo('Executing action')
-		    # An object is required, and we got one. Execute.
-		    self.session.get_current_action().update_objects(
-			self.world.get_frame_list())
-		    self.arms.start_execution(self.session.get_current_action(),
-			EXECUTION_Z_OFFSET)
-		else:
-		    # An object is required, but we didn't get it.
-		    rospy.loginfo('Not executing action')
-		    return [
-			RobotSpeech.OBJECT_NOT_DETECTED, GazeGoal.SHAKE]
+		self.world.update_object_pose()
+		self.world.update()
+		rospy.loginfo('Executing action')
+		# An object is required, and we got one. Execute.
+		self.session.get_current_action().update_objects(self.world.get_frame_list())
+		self.arms.start_execution(self.session.get_current_action(), EXECUTION_Z_OFFSET)
 	    else:
 		# No object is required: start execution now.
 		self.arms.start_execution(action, EXECUTION_Z_OFFSET)
