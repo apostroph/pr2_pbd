@@ -599,6 +599,7 @@ class World:
                 #points = cluster.points
                 points = pc2.read_points(cluster, field_names=['x', 'y', 'z'],
             skip_nans=True)
+                rospy.loginfo("Point %s", len(list(points)))
                 if (len(list(points)) == 0):
                     return Point(0, 0, 0)
                 [minX, maxX, minY, maxY, minZ, maxZ] = [10, -10, 10, -10, 10, -10]
