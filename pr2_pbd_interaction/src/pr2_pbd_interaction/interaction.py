@@ -655,6 +655,7 @@ class Interaction:
 			EXECUTION_Z_OFFSET)
 		else:
 		    # An object is required, but we didn't get it.
+		    rospy.loginfo('Not executing action')
 		    return [
 			RobotSpeech.OBJECT_NOT_DETECTED, GazeGoal.SHAKE]
 	    else:
