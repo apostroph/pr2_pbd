@@ -599,7 +599,6 @@ class World:
                 #points = cluster.points
                 points = pc2.read_points(cluster, field_names=['x', 'y', 'z'],
             skip_nans=True)
-                rospy.loginfo("Object detected")
                 if (len(list(points)) == 0):
                     return Point(0, 0, 0)
                 [minX, maxX, minY, maxY, minZ, maxZ] = [10, -10, 10, -10, 10, -10]
@@ -610,6 +609,7 @@ class World:
                     maxX = max(maxX, x)
                     maxY = max(maxY, y)
                     maxZ = max(maxZ, z)
+                rospy.loginfo("Object detected %s : %s : %s", (minX + maxX) / 2, (minY + maxY) / 2, (minZ + maxZ) / 2))
                 self._add_new_object(Pose(Point((minX + maxX) / 2, (minY + maxY) / 2,
                                                 (minZ + maxZ) / 2), Quaternion(0, 0, 0, 1)),
                                      Point(maxX - minX, maxY - minY, maxZ - minZ), False)
@@ -819,6 +819,7 @@ class World:
             mesh (Mesh|None): A mesh, if it exists (can be None).
         '''
         n_objects = len(World.objects)
+        rospy.loginfo('+')
         World.objects.append(WorldLandmark(
             pose, n_objects, dimensions, is_recognized))
         int_marker = self._get_object_marker(len(World.objects) - 1)
