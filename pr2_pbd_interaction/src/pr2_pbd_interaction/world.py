@@ -588,7 +588,7 @@ class World:
 
     def _custom_update_object_pose(self, resp):
 
-        rospy.loginfo("Getting object from vision module")
+        rospy.loginfo("Getting %s objects from vision module", len(resp.clusters))
 
         try:
 
