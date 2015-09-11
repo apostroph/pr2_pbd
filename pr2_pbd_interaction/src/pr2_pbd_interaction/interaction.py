@@ -75,6 +75,8 @@ class Interaction:
             'visualization_marker_array', MarkerArray)
         self._arm_reset_publisher = rospy.Publisher(
             'arm_control_reset', String)
+        self._action_state_feedback = rospy.Publisher(
+            'action_state_feedback', String)
         rospy.Subscriber(
             '/action/perform_action', Command, self._action_command_cb)
 
@@ -628,7 +630,6 @@ class Interaction:
                     'Ignoring speech command during execution: ' + strCmd)
         else:
             rospy.logwarn('This command (' + strCmd + ') is unknown.')
-        self.world.update_object_pose()
 
     def _execute_action(self, __=None):
         '''Starts the execution of the current action.
@@ -834,14 +835,16 @@ class Interaction:
         if self.arms.status == ExecutionStatus.SUCCEEDED:
             # Execution completed successfully.
             Response.say(RobotSpeech.EXECUTION_ENDED)
-            Response.perform_gaze_action(GazeGoal.NOD)
+            #Response.perform_gaze_action(GazeGoal.NOD)
         elif self.arms.status == ExecutionStatus.PREEMPTED:
             # Execution stopped early (preempted).
             Response.say(RobotSpeech.EXECUTION_PREEMPTED)
-            Response.perform_gaze_action(GazeGoal.SHAKE)
+            #Response.perform_gaze_action(GazeGoal.SHAKE)
         else:
             # Couldn't solve for joint positions (IK).
             Response.say(RobotSpeech.EXECUTION_ERROR_NOIK)
-            Response.perform_gaze_action(GazeGoal.SHAKE)
+            #Response.perform_gaze_action(GazeGoal.SHAKE)
         # No matter what, we're not executing anymore.
         self.arms.status = ExecutionStatus.NOT_EXECUTING
+        self.world.update_object_pose()
+        self._action_state_feedback.publish(String('action_ended'))
