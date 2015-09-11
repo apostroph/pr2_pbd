@@ -628,6 +628,7 @@ class Interaction:
                     'Ignoring speech command during execution: ' + strCmd)
         else:
             rospy.logwarn('This command (' + strCmd + ') is unknown.')
+        self.world.update_object_pose()
 
     def _execute_action(self, __=None):
         '''Starts the execution of the current action.
