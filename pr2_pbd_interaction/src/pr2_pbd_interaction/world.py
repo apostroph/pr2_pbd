@@ -587,6 +587,17 @@ class World:
     # ##################################################################
 
     def _custom_update_object_pose(self, resp):
+        ''' Function to externally update an object pose.'''
+        # Look down at the table.
+        rospy.loginfo('Head attempting to look at table.')
+        Response.perform_gaze_action(GazeGoal.LOOK_UP)
+        while (Response.gaze_client.get_state() == GoalStatus.PENDING or
+               Response.gaze_client.get_state() == GoalStatus.ACTIVE):
+            rospy.sleep(PAUSE_SECONDS)
+        if Response.gaze_client.get_state() != GoalStatus.SUCCEEDED:
+            rospy.logerr('Could not look down to take table snapshot')
+            return False
+        rospy.loginfo('Head is now (successfully) stairing at table.')
 
         rospy.loginfo("Getting %s objects from vision module", len(resp.clusters))
 
