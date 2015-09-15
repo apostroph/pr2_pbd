@@ -644,18 +644,13 @@ class Interaction:
         '''
         # We must *have* a current action.
         if self.session.n_actions() > 0:
-	    # Now, see if we can execute.
-	    if self.session.get_current_action().is_object_required():
-		# We need an object; check if we have one.
-		self.world.update_object_pose()
-		self.world.update()
-		rospy.loginfo('Executing action')
-		# An object is required, and we got one. Execute.
-		self.session.get_current_action().update_objects(self.world.get_frame_list())
-		self.arms.start_execution(self.session.get_current_action(), EXECUTION_Z_OFFSET)
-	    else:
-		# No object is required: start execution now.
-		self.arms.start_execution(action, EXECUTION_Z_OFFSET)
+	    # We need an object; check if we have one.
+	    self.world.update_object_pose()
+	    self.world.update()
+	    # An object is required, and we got one. Execute.
+	    self.session.get_current_action().update_objects(self.world.get_frame_list())
+	    rospy.loginfo('Executing action')
+	    self.arms.start_execution(self.session.get_current_action(), EXECUTION_Z_OFFSET)
 
 	    # Reply: starting execution.
 	    return [RobotSpeech.START_EXECUTION + ' ' +
