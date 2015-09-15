@@ -646,7 +646,7 @@ class Interaction:
         if self.session.n_actions() > 0:
 	    # We need an object; check if we have one.
 	    self.world.update_object_pose()
-	    #self.world.update()
+	    self.world.update()
 	    # An object is required, and we got one. Execute.
 	    self.session.get_current_action().update_objects(self.world.get_frame_list())
 	    rospy.loginfo('Executing action')
