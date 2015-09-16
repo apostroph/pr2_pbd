@@ -650,7 +650,7 @@ class Interaction:
 	    end = start
 	    self.world.update()
 	    end = rospy.get_rostime()
-	    rospy.loginfo("Current time %i ", end.msecs-start.nsecs)
+	    rospy.loginfo("Current time %i ", end.secs-start.secs)
 	    # An object is required, and we got one. Execute.
 	    self.session.get_current_action().update_objects(self.world.get_frame_list())
 	    rospy.loginfo('Executing action')
