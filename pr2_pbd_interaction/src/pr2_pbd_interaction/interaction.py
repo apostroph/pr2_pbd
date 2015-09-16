@@ -643,13 +643,8 @@ class Interaction:
             [str, int]: a speech response and a GazeGoal.* constant
         '''
         # We must *have* a current action.
-	    
-	start = rospy.get_rostime()
-	end = start
         if self.session.n_actions() > 0:
 	    # We need an object; check if we have one.
-	    rospy.loginfo("Session %i ", (end.nsecs-start.nsecs))
-	    rospy.loginfo('Executing action')
 	    
 	    self.world.update_object_pose()
 	    
