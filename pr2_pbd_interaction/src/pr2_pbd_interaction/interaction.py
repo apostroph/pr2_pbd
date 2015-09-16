@@ -645,25 +645,25 @@ class Interaction:
         # We must *have* a current action.
         if self.session.n_actions() > 0:
 	    # We need an object; check if we have one.
-	    time = rospy.get_time()
-	    rospy.loginfo('update_object_pose: %i', time.secs)
+	    start = rospy.get_rostime()
+	    rospy.loginfo('update_object_pose: %i', start.secs)
 	    self.world.update_object_pose()
 	    
-	    time = rospy.get_time()
-	    rospy.loginfo('update: %i', time.secs)
+	    start = rospy.get_rostime()
+	    rospy.loginfo('update: %i', start.secs)
 	    self.world.update()
 	    # An object is required, and we got one. Execute.
 	    
-	    time = rospy.get_time()
-	    rospy.loginfo('get_current_action: %i', time.secs)
+	    start = rospy.get_rostime()
+	    rospy.loginfo('get_current_action: %i', start.secs)
 	    self.session.get_current_action().update_objects(self.world.get_frame_list())
 	    
-	    time = rospy.get_time()
-	    rospy.loginfo('start_execution: %i', time.secs)
+	    start = rospy.get_rostime()
+	    rospy.loginfo('start_execution: %i', start.secs)
 	    self.arms.start_execution(self.session.get_current_action(), EXECUTION_Z_OFFSET)
 
-	    time = rospy.get_time()
-	    rospy.loginfo('end: %i', time.secs)
+	    start = rospy.get_rostime()
+	    rospy.loginfo('end: %i', start.secs)
 	    # Reply: starting execution.
 	    return [RobotSpeech.START_EXECUTION + ' ' +
 		    str(self.session.current_action_index), None]
