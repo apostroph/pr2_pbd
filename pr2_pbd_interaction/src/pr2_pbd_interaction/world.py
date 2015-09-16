@@ -593,7 +593,6 @@ class World:
         try:
 
 	    
-	    start = rospy.get_rostime()
             self._reset_objects()
             count_object = 0
 
@@ -623,9 +622,6 @@ class World:
                                      Point(maxX - minX, maxY - minY, maxZ - minZ), False)
                 rospy.loginfo("Object detected %s : %s : %s", (minX + maxX) / 2, (minY + maxY) / 2, (minZ + maxZ) / 2)
                 
-	    end = rospy.get_rostime()
-	    rospy.loginfo("Session %i ", (end.nsecs-start.nsecs))
-	    rospy.loginfo('Executing action')
             return True
 
         except rospy.ServiceException, e:
