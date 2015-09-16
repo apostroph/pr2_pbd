@@ -656,7 +656,7 @@ class Interaction:
 	    
 	    start = rospy.get_rostime()
 	    rospy.loginfo('get_current_action: %i', start.secs)
-	    self.session.get_current_action().update_objects(self.world.get_frame_list())
+	    #self.session.get_current_action().update_objects(self.world.get_frame_list())
 	    
 	    start = rospy.get_rostime()
 	    rospy.loginfo('start_execution: %i', start.secs)
