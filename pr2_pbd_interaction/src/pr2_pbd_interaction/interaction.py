@@ -643,17 +643,30 @@ class Interaction:
             [str, int]: a speech response and a GazeGoal.* constant
         '''
         # We must *have* a current action.
+	    
         if self.session.n_actions() > 0:
 	    # We need an object; check if we have one.
+	    
+	    start = rospy.get_rostime()
+	    end = start
 	    self.world.update_object_pose()
+	    end = rospy.get_rostime()
+	    rospy.loginfo("World update object pose %i ", (end.nsecs-start.nsecs))
+	    
 	    start = rospy.get_rostime()
 	    end = start
 	    self.world.update()
 	    end = rospy.get_rostime()
-	    rospy.loginfo("Current time %i ", end.secs-start.secs)
+	    rospy.loginfo("World update %i ", (end.nsecs-start.nsecs))
 	    # An object is required, and we got one. Execute.
+	    
+	    start = rospy.get_rostime()
+	    end = start
 	    self.session.get_current_action().update_objects(self.world.get_frame_list())
+	    end = rospy.get_rostime()
+	    rospy.loginfo("Get current action %i ", (end.nsecs-start.nsecs))
 	    rospy.loginfo('Executing action')
+	    
 	    self.arms.start_execution(self.session.get_current_action(), EXECUTION_Z_OFFSET)
 
 	    # Reply: starting execution.
